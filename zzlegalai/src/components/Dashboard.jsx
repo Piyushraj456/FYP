@@ -32,6 +32,8 @@ const Dashboard = () => {
     };
   };
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchDocumentHistory = async () => {
     try {
       setLoading(true);
@@ -39,11 +41,11 @@ const Dashboard = () => {
       if (!headers) return;
 
       const response = await fetch(
-        `${window.location.protocol}//${window.location.hostname}:5000/api/summarize/history?limit=50`,
+        `${API_URL}/api/summarize/history?limit=50`,
         {
           method: "GET",
           headers,
-        }
+        },
       );
 
       const data = await response.json();
@@ -124,28 +126,23 @@ const Dashboard = () => {
       const headers = getAuthHeaders();
       if (!headers) return;
 
-   
       setDocumentHistory((prev) =>
         prev.map((d) =>
           d.documentId === doc.documentId
             ? { ...d, summaryStatus: "processing", version: d.version + 1 }
-            : d
-        )
+            : d,
+        ),
       );
 
-      const response = await fetch(
-        `${window.location.protocol}//${window.location.hostname}:5000/api/summarize/regenerate`,
-        {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ documentId: doc.documentId }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/summarize/regenerate`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ documentId: doc.documentId }),
+      });
 
       if (response.ok) {
         alert("Summary regeneration started");
 
-     
         setTimeout(() => {
           fetchDocumentHistory();
         }, 2000);
@@ -155,14 +152,14 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error regenerating summary:", error);
       alert("Failed to regenerate summary");
- 
+
       fetchDocumentHistory();
     }
   };
 
   const handleDeleteSummary = async (doc) => {
     const confirmed = window.confirm(
-      `Are you sure you want to delete the summary for "${doc.title}"? This action cannot be undone.`
+      `Are you sure you want to delete the summary for "${doc.title}"? This action cannot be undone.`,
     );
     if (!confirmed) return;
 
@@ -171,16 +168,16 @@ const Dashboard = () => {
       if (!headers) return;
 
       const response = await fetch(
-        `${window.location.protocol}//${window.location.hostname}:5000/api/summarize/${doc.documentId}`,
+        `${API_URL}/api/summarize/${doc.documentId}`,
         {
           method: "DELETE",
           headers,
-        }
+        },
       );
 
       if (response.ok) {
         setDocumentHistory((prev) =>
-          prev.filter((d) => d.documentId !== doc.documentId)
+          prev.filter((d) => d.documentId !== doc.documentId),
         );
 
         alert(`Summary deleted for "${doc.title}"`);
@@ -326,7 +323,7 @@ const Dashboard = () => {
                     <p className="text-2xl font-bold text-gray-900">
                       {
                         documentHistory.filter(
-                          (d) => d.summaryStatus === "completed"
+                          (d) => d.summaryStatus === "completed",
                         ).length
                       }
                     </p>
@@ -344,7 +341,7 @@ const Dashboard = () => {
                     <p className="text-2xl font-bold text-gray-900">
                       {
                         documentHistory.filter(
-                          (d) => d.summaryStatus === "processing"
+                          (d) => d.summaryStatus === "processing",
                         ).length
                       }
                     </p>
@@ -362,7 +359,7 @@ const Dashboard = () => {
                     <p className="text-2xl font-bold text-gray-900">
                       {
                         documentHistory.filter(
-                          (d) => d.summaryStatus === "failed"
+                          (d) => d.summaryStatus === "failed",
                         ).length
                       }
                     </p>
@@ -438,7 +435,7 @@ const Dashboard = () => {
 
                     <div
                       className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                        doc.summaryStatus
+                        doc.summaryStatus,
                       )}`}
                     >
                       {getStatusIcon(doc.summaryStatus)}

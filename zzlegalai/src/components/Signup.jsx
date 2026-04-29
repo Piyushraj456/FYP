@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useAuthContext } from "../context/AuthContext"; 
+import { useAuthContext } from "../context/AuthContext";
 
 export default function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -16,25 +16,31 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-  
-      const res = await axios.post("http://localhost:5000/api/auth/register", form);
+      const res = await axios.post(
+        "https://legalease-backend-4.onrender.com/api/auth/register",
+        form,
+      );
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-   
       setAuthUser(res.data.user);
 
       toast.success(res.data.message || "Signup successful!");
       navigate("/");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Signup failed, please try again");
+      toast.error(
+        err.response?.data?.message || "Signup failed, please try again",
+      );
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-lg rounded w-96">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 shadow-lg rounded w-96"
+      >
         <h2 className="text-2xl font-bold mb-4">Signup</h2>
         <input
           type="text"

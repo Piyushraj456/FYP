@@ -23,7 +23,6 @@ const ExtractPage = () => {
       try {
         setExtractionStatus("processing");
 
-     
         const progressInterval = setInterval(() => {
           setProgress((prev) => {
             if (prev >= 90) {
@@ -34,7 +33,6 @@ const ExtractPage = () => {
           });
         }, 500);
 
-     
         const token = localStorage.getItem("token");
         if (!token) {
           toast.error("Authentication token not found. Please login again.");
@@ -45,22 +43,19 @@ const ExtractPage = () => {
         }
 
         const response = await axios.post(
-          `${
-            import.meta.env.VITE_API_URL || "http://localhost:5000"
-          }/api/extract`,
+          "https://legalease-backend-4.onrender.com/api/extract",
           { documentId },
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         clearInterval(progressInterval);
         setProgress(100);
         setExtractionStatus("completed");
 
-    
         setTimeout(() => {
           navigate(`/summary/${documentId}`);
         }, 1500);

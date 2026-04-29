@@ -13,29 +13,35 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", form);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/auth/login`,
+      form
+    );
 
-      if (res.data?.token && res.data?.user) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+    if (res.data?.token && res.data?.user) {
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-        setAuthUser(res.data.user); // 👈 use context
-        toast.success(res.data.message || "Login successful!");
-        navigate("/");
-      } else {
-        toast.error("Invalid response from server");
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed, please try again");
+      setAuthUser(res.data.user);
+      toast.success(res.data.message || "Login successful!");
+      navigate("/");
+    } else {
+      toast.error("Invalid response from server");
     }
-  };
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Login failed, please try again");
+  }
+};
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-lg rounded w-96">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 shadow-lg rounded w-96"
+      >
         <h2 className="text-2xl font-bold mb-4">Login</h2>
         <input
           type="email"
