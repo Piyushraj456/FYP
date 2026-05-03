@@ -1,276 +1,342 @@
-INSTRUCTIONS TO RUN – LegalEase Project
+================================================================================
+                              L E G A L E A S E
+                    AI-Powered Legal Document Analysis System
+================================================================================
+
+  Department of Computer Science & Engineering
+  Final Year Capstone Project | Academic Year 2024-25
+
+  Project Team:
+    - Harsh Kumar Singh
+    - Piyush Raj
+    - Prasoon Krishan Gupta
+    - Omvrit Chitrada
+
+================================================================================
+  TABLE OF CONTENTS
+================================================================================
+
+  1.  Project Overview
+  2.  System Architecture
+  3.  Prerequisites
+  4.  Installation & Setup
+        4.1  Clone the Repository
+        4.2  Python AI Service  (zlegal/)
+        4.3  Node.js Backend    (zlegalai/)
+        4.4  React Frontend     (zzlegalai/)
+  5.  Running the Application  [Order Matters]
+  6.  How to Use the System
+  7.  Input Specifications
+  8.  Processing Pipeline
+  9.  Output & Report Format
+  10. API Reference
+  11. Troubleshooting Guide
+
+================================================================================
+  1. PROJECT OVERVIEW
+================================================================================
+
+  LegalEase is an AI-powered legal document analysis platform developed as a
+  Final Year Capstone Project. The system is designed to automate the review
+  of complex legal contracts and agreements, making legal analysis faster,
+  more accessible, and easier to understand.
+
+  Users can upload any PDF document — including scanned files — and the system
+  will automatically extract key clauses, detect potential legal risks, generate
+  plain-English summaries, and provide actionable recommendations through a
+  structured interactive dashboard.
+
+  The project integrates Natural Language Processing (NLP), Machine Learning
+  (ML), and Large Language Models (LLMs) into a production-grade full-stack
+  web application, demonstrating real-world applied AI in the legal technology
+  domain.
+
+  Key Features:
+    > Automated clause extraction and classification
+    > Risk detection using rule-based logic and ML models
+    > LLM-generated plain-English contract summaries
+    > Overall contract risk scoring
+    > Secure user authentication and document management
+    > OCR support for scanned PDF documents
+
+================================================================================
+  2. SYSTEM ARCHITECTURE
+================================================================================
+
+  LegalEase is built on a three-tier microservices architecture, with each
+  service responsible for a distinct layer of functionality.
+
+  +--------------------------------------------------------------------------+
+  |  Layer              Folder        Technology Stack                        |
+  +--------------------------------------------------------------------------+
+  |  AI / NLP Service   zlegal/       Python 3.10, FastAPI, spaCy,           |
+  |                                   pdfplumber, pytesseract (OCR)          |
+  |                                                                          |
+  |  Backend API        zlegalai/     Node.js, Express.js, MongoDB,          |
+  |                                   JWT Authentication, UploadThing        |
+  |                                                                          |
+  |  Frontend UI        zzlegalai/    React.js, Vite, Axios, UploadThing     |
+  +--------------------------------------------------------------------------+
+
+  Service Communication:
+    - The React Frontend communicates with the Node.js Backend via REST API.
+    - The Node.js Backend forwards document processing requests to the
+      Python FastAPI AI Service.
+    - Processed results are stored in MongoDB and returned to the frontend.
+
+================================================================================
+  3. PREREQUISITES
+================================================================================
+
+  Ensure all of the following are installed before proceeding:
+
+    Software            Version Required       Verify Installation
+    ------------------  ---------------------  -------------------------
+    Node.js             v18.0 or higher        node --version
+    npm                 Bundled with Node.js   npm --version
+    Python              v3.10 or higher        python --version
+    MongoDB             Local or Atlas Cloud   mongo --version
+    Git                 Any stable version     git --version
+
+  Additional Accounts Required:
+    - MongoDB Atlas account (if not running MongoDB locally)
+    - UploadThing account for file upload service
+      → https://uploadthing.com
 
----
+================================================================================
+  4. INSTALLATION & SETUP
+================================================================================
 
-1. PROJECT OVERVIEW
+  ------------------------------------------------------------------------
+  4.1  CLONE THE REPOSITORY
+  ------------------------------------------------------------------------
 
----
+    git clone <your-repo-link>
+    cd <project-folder>
 
-LegalEase is an AI-powered system for analyzing legal documents. It processes documents (PDF/scanned), extracts clauses, detects risks, and generates a structured report with explanations and recommendations.
+  ------------------------------------------------------------------------
+  4.2  PYTHON AI SERVICE  —  zlegal/
+  ------------------------------------------------------------------------
 
-The system consists of 3 main parts:
+    Navigate to the folder:
+      cd zlegal
 
-1. Frontend (React + Vite)
-2. Backend (Node.js + Express)
-3. AI/NLP Service (Python + FastAPI)
+    Create a Python virtual environment:
+      python -m venv venv
 
----
+    Activate the virtual environment:
+      Windows  :  venv\Scripts\activate
+      Mac/Linux:  source venv/bin/activate
 
-2. PROJECT FOLDER STRUCTURE (IMPORTANT)
+    Install all required dependencies:
+      pip install -r requirements.txt
 
----
+    Download the spaCy NLP language model:
+      python -m spacy download en_core_web_sm
 
-* zlegal/     → Python Backend (FastAPI + NLP + AI processing)
-* zlegalai/   → Node.js Backend (Express API + Authentication + Routing)
-* zzlegalai/  → React Frontend (UI + Dashboard)
+    Start the FastAPI server:
+      uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
----
+    Confirm the service is running:
+      Service URL  →  http://localhost:8000
+      API Docs     →  http://localhost:8000/docs
 
-3. PREREQUISITES
+  ------------------------------------------------------------------------
+  4.3  NODE.JS BACKEND  —  zlegalai/
+  ------------------------------------------------------------------------
 
----
+    Navigate to the folder:
+      cd ../zlegalai
 
-Before running the project, ensure the following are installed:
+    Install all required dependencies:
+      npm install
 
-* Node.js (v18 or higher)
-* npm
-* Python (3.10 or higher)
-* MongoDB (local or MongoDB Atlas)
-* Git
+    Create a .env file in the root of this folder:
+      touch .env   (Mac/Linux)
+      OR manually create a file named ".env"
 
----
+    Add the following environment variables to the .env file:
 
-4. SETUP & INSTALLATION
+      PORT=5000
+      MONGO_URI=your_mongodb_connection_string
+      JWT_SECRET=your_jwt_secret_key
+      UPLOADTHING_SECRET=your_uploadthing_secret
+      UPLOADTHING_APP_ID=your_uploadthing_app_id
+      FASTAPI_URL=http://localhost:8000
 
----
+    Start the backend server:
+      npm start
 
-STEP 1: Clone the Repository
+    Confirm the service is running:
+      Backend URL  →  http://localhost:5000
 
-git clone <your-repo-link>
-cd <project-folder>
+  ------------------------------------------------------------------------
+  4.4  REACT FRONTEND  —  zzlegalai/
+  ------------------------------------------------------------------------
 
----
+    Navigate to the folder:
+      cd ../zzlegalai
 
-STEP 2: Setup Python AI Service (zlegal)
+    Install all required dependencies:
+      npm install
 
-cd zlegal
+    Create a .env file in the root of this folder:
+      touch .env   (Mac/Linux)
+      OR manually create a file named ".env"
 
-Create virtual environment:
-python -m venv venv
+    Add the following environment variables to the .env file:
 
-Activate environment:
-Windows:
-venv\Scripts\activate
+      VITE_API_URL=http://localhost:5000
+      VITE_UPLOADTHING_APP_ID=your_uploadthing_app_id
 
-Install dependencies:
-pip install -r requirements.txt
+    Start the frontend development server:
+      npm run dev
 
-Download NLP model:
-python -m spacy download en_core_web_sm
+    Confirm the application is running:
+      Frontend URL  →  http://localhost:5173
 
-Run FastAPI server:
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+================================================================================
+  5. RUNNING THE APPLICATION  [ORDER MATTERS]
+================================================================================
 
-Service URL:
-http://localhost:8000
-Docs:
-http://localhost:8000/docs
+  Services must be started in the following order. Starting out of sequence
+  may cause connection failures between layers.
 
----
+    Step 1  →  Start the Python AI Service    (zlegal/)
+    Step 2  →  Start the Node.js Backend      (zlegalai/)
+    Step 3  →  Start the React Frontend       (zzlegalai/)
 
-STEP 3: Setup Node.js Backend (zlegalai)
+  Once all three services are running, open your browser and navigate to:
+    http://localhost:5173
 
-cd ../zlegalai
+================================================================================
+  6. HOW TO USE THE SYSTEM
+================================================================================
 
-Install dependencies:
-npm install
+    1. Open the application in your browser at http://localhost:5173
+    2. Register a new account or log in with existing credentials
+    3. Upload a legal document in PDF format using the upload interface
+    4. Wait for the system to process and analyze the document
+    5. View the complete analysis report on your dashboard
 
-Create .env file:
+  Processing typically completes within a few seconds depending on document
+  size and system resources.
 
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-UPLOADTHING_SECRET=your_uploadthing_secret
-UPLOADTHING_APP_ID=your_uploadthing_app_id
-FASTAPI_URL=http://localhost:8000
+================================================================================
+  7. INPUT SPECIFICATIONS
+================================================================================
 
-Run backend:
-npm start
+  Supported File Formats:
+    - Standard PDF files          (.pdf)
+    - Scanned / Image-based PDFs  (.pdf with OCR processing)
 
-Backend URL:
-http://localhost:5000
+  Document Requirements:
+    - English language preferred for optimal NLP accuracy
+    - Clear, legible text for best OCR results on scanned files
+    - No password protection on the PDF file
 
----
+================================================================================
+  8. PROCESSING PIPELINE
+================================================================================
 
-STEP 4: Setup Frontend (zzlegalai)
-
-cd ../zzlegalai
-
-Install dependencies:
-npm install
-
-Create .env file:
-
-VITE_API_URL=http://localhost:5000
-VITE_UPLOADTHING_APP_ID=your_uploadthing_app_id
-
-Run frontend:
-npm run dev
-
-Frontend URL:
-http://localhost:5173
-
----
-
-5. HOW TO RUN (ORDER MATTERS)
-
----
-
-Always start services in this order:
-
-1. Start Python Backend (zlegal)
-2. Start Node Backend (zlegalai)
-3. Start Frontend (zzlegalai)
-
----
-
-6. HOW TO USE THE SYSTEM
-
----
-
-1. Open frontend in browser
-2. Register/Login
-3. Upload a legal document (PDF)
-4. System processes the file
-5. Results are displayed in dashboard
-
----
-
-7. INPUT FORMAT
-
----
-
-Supported formats:
-
-* PDF (.pdf)
-* Scanned PDFs (OCR supported)
-
-Requirements:
-
-* Clear readable text
-* English language preferred
-
----
-
-8. PROCESSING PIPELINE
-
----
-
-Stage 1: Extraction
-
-* Text extraction using pdfplumber
-* OCR for scanned documents
-
-Stage 2: Analysis
-
-* Clause segmentation
-* Clause classification
-* Risk detection (rule-based + ML)
-
-Stage 3: Report Generation
-
-* LLM summary generation
-* Risk scoring
-* Recommendations
-
----
-
-9. OUTPUT FORMAT
-
----
-
-The system generates:
-
-1. Clause Analysis:
-
-   * Clause type
-   * Risk flags
-   * Explanation
-
-2. Risk Score:
-
-   * Overall contract risk rating
-
-3. Summary:
-
-   * Plain English explanation
-
-4. Recommendations:
-
-   * Suggested improvements
-
-Output is:
-
-* Displayed on frontend dashboard
-* Stored in MongoDB database
-
----
-
-10. API ENDPOINTS
-
----
-
-Authentication (Node.js):
-POST /api/auth/register
-POST /api/auth/login
-
-Documents:
-POST /api/documents/upload
-GET /api/documents
-
-Analysis (FastAPI):
-POST /analyze
-POST /extract
-POST /classify
-
----
-
-11. TROUBLESHOOTING
-
----
-
-Issue: FastAPI not working
-Fix:
-
-* Ensure zlegal server is running on port 8000
-
-Issue: Backend error
-Fix:
-
-* Check .env file in zlegalai
-* Verify MongoDB connection
-
-Issue: Frontend not connecting
-Fix:
-
-* Check VITE_API_URL
-
-Issue: File upload fails
-Fix:
-
-* Check UploadThing credentials
-
----
-
-12. AUTHORS
-
----
-
-* Harsh Kumar Singh
-* Piyush Raj
-* Prasoon Krishan Gupta
-* Omvrit Chitrada
-
----
-
-## END OF FILE
+  Uploaded documents pass through a three-stage processing pipeline:
+
+  STAGE 1  |  EXTRACTION
+  -----------------------------------------------------------------------
+  > Text is extracted from standard PDFs using pdfplumber.
+  > Scanned or image-based PDFs are processed through OCR (pytesseract)
+    to recover the full text content.
+
+  STAGE 2  |  ANALYSIS
+  -----------------------------------------------------------------------
+  > Extracted text is segmented into individual clauses.
+  > Each clause is classified by type (e.g., liability, indemnity,
+    termination, confidentiality, payment terms, etc.).
+  > Risk detection is applied using a combination of rule-based logic
+    and trained ML classification models.
+
+  STAGE 3  |  REPORT GENERATION
+  -----------------------------------------------------------------------
+  > An LLM generates a plain-English summary of the full document.
+  > An overall risk score is calculated for the contract.
+  > Specific recommendations are generated for flagged clauses.
+  > Results are stored in MongoDB and displayed on the dashboard.
+
+================================================================================
+  9. OUTPUT & REPORT FORMAT
+================================================================================
+
+  Each analyzed document produces a structured report containing:
+
+  (A) CLAUSE ANALYSIS
+      - Clause type and classification label
+      - Risk flags with detailed explanations
+      - Contextual notes for each identified clause
+
+  (B) RISK SCORE
+      - An overall contract risk rating (Low / Medium / High)
+      - Breakdown of risk by clause category
+
+  (C) PLAIN-ENGLISH SUMMARY
+      - A concise, human-readable summary of the full document
+      - Written to be understandable without legal expertise
+
+  (D) RECOMMENDATIONS
+      - Specific, actionable suggestions for improving high-risk clauses
+      - Prioritized by severity of detected risk
+
+  Output is:
+    - Displayed interactively on the frontend dashboard
+    - Persisted in the MongoDB database for future reference
+
+================================================================================
+  10. API REFERENCE
+================================================================================
+
+  NODE.JS BACKEND  (Base URL: http://localhost:5000)
+  -----------------------------------------------------------------------
+  POST   /api/auth/register       Register a new user account
+  POST   /api/auth/login          Authenticate and receive a JWT token
+  POST   /api/documents/upload    Upload a document for analysis
+  GET    /api/documents           Retrieve all documents for the user
+
+  PYTHON FASTAPI SERVICE  (Base URL: http://localhost:8000)
+  -----------------------------------------------------------------------
+  POST   /analyze                 Run full document analysis pipeline
+  POST   /extract                 Extract raw text from a PDF
+  POST   /classify                Classify clauses from extracted text
+
+  Full interactive API documentation is available at:
+    http://localhost:8000/docs  (Swagger UI — auto-generated by FastAPI)
+
+================================================================================
+  11. TROUBLESHOOTING GUIDE
+================================================================================
+
+  Issue    :  FastAPI service not responding
+  Solution :  Ensure the Python virtual environment is activated and the
+              uvicorn server is running on port 8000. Check terminal for
+              error messages.
+
+  Issue    :  Node.js backend throws an error on startup
+  Solution :  Verify that the .env file exists in zlegalai/ and that all
+              required environment variables are correctly filled in.
+              Confirm MongoDB is running and the connection string is valid.
+
+  Issue    :  Frontend cannot connect to the backend
+  Solution :  Check that VITE_API_URL in zzlegalai/.env is set to
+              http://localhost:5000 and that the Node.js backend is running.
+
+  Issue    :  File upload fails
+  Solution :  Verify that UPLOADTHING_SECRET and UPLOADTHING_APP_ID are
+              correctly configured in both zlegalai/.env and zzlegalai/.env.
+              Confirm your UploadThing account is active.
+
+  Issue    :  OCR not working on scanned PDFs
+  Solution :  Ensure pytesseract and Tesseract OCR are properly installed
+              on your system. Refer to the requirements.txt for exact
+              versions.
+
+================================================================================
+                            END OF DOCUMENT
+================================================================================
