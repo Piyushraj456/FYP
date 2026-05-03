@@ -1,0 +1,276 @@
+INSTRUCTIONS TO RUN – LegalEase Project
+
+---
+
+1. PROJECT OVERVIEW
+
+---
+
+LegalEase is an AI-powered system for analyzing legal documents. It processes documents (PDF/scanned), extracts clauses, detects risks, and generates a structured report with explanations and recommendations.
+
+The system consists of 3 main parts:
+
+1. Frontend (React + Vite)
+2. Backend (Node.js + Express)
+3. AI/NLP Service (Python + FastAPI)
+
+---
+
+2. PROJECT FOLDER STRUCTURE (IMPORTANT)
+
+---
+
+* zlegal/     → Python Backend (FastAPI + NLP + AI processing)
+* zlegalai/   → Node.js Backend (Express API + Authentication + Routing)
+* zzlegalai/  → React Frontend (UI + Dashboard)
+
+---
+
+3. PREREQUISITES
+
+---
+
+Before running the project, ensure the following are installed:
+
+* Node.js (v18 or higher)
+* npm
+* Python (3.10 or higher)
+* MongoDB (local or MongoDB Atlas)
+* Git
+
+---
+
+4. SETUP & INSTALLATION
+
+---
+
+STEP 1: Clone the Repository
+
+git clone <your-repo-link>
+cd <project-folder>
+
+---
+
+STEP 2: Setup Python AI Service (zlegal)
+
+cd zlegal
+
+Create virtual environment:
+python -m venv venv
+
+Activate environment:
+Windows:
+venv\Scripts\activate
+
+Install dependencies:
+pip install -r requirements.txt
+
+Download NLP model:
+python -m spacy download en_core_web_sm
+
+Run FastAPI server:
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+Service URL:
+http://localhost:8000
+Docs:
+http://localhost:8000/docs
+
+---
+
+STEP 3: Setup Node.js Backend (zlegalai)
+
+cd ../zlegalai
+
+Install dependencies:
+npm install
+
+Create .env file:
+
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+UPLOADTHING_SECRET=your_uploadthing_secret
+UPLOADTHING_APP_ID=your_uploadthing_app_id
+FASTAPI_URL=http://localhost:8000
+
+Run backend:
+npm start
+
+Backend URL:
+http://localhost:5000
+
+---
+
+STEP 4: Setup Frontend (zzlegalai)
+
+cd ../zzlegalai
+
+Install dependencies:
+npm install
+
+Create .env file:
+
+VITE_API_URL=http://localhost:5000
+VITE_UPLOADTHING_APP_ID=your_uploadthing_app_id
+
+Run frontend:
+npm run dev
+
+Frontend URL:
+http://localhost:5173
+
+---
+
+5. HOW TO RUN (ORDER MATTERS)
+
+---
+
+Always start services in this order:
+
+1. Start Python Backend (zlegal)
+2. Start Node Backend (zlegalai)
+3. Start Frontend (zzlegalai)
+
+---
+
+6. HOW TO USE THE SYSTEM
+
+---
+
+1. Open frontend in browser
+2. Register/Login
+3. Upload a legal document (PDF)
+4. System processes the file
+5. Results are displayed in dashboard
+
+---
+
+7. INPUT FORMAT
+
+---
+
+Supported formats:
+
+* PDF (.pdf)
+* Scanned PDFs (OCR supported)
+
+Requirements:
+
+* Clear readable text
+* English language preferred
+
+---
+
+8. PROCESSING PIPELINE
+
+---
+
+Stage 1: Extraction
+
+* Text extraction using pdfplumber
+* OCR for scanned documents
+
+Stage 2: Analysis
+
+* Clause segmentation
+* Clause classification
+* Risk detection (rule-based + ML)
+
+Stage 3: Report Generation
+
+* LLM summary generation
+* Risk scoring
+* Recommendations
+
+---
+
+9. OUTPUT FORMAT
+
+---
+
+The system generates:
+
+1. Clause Analysis:
+
+   * Clause type
+   * Risk flags
+   * Explanation
+
+2. Risk Score:
+
+   * Overall contract risk rating
+
+3. Summary:
+
+   * Plain English explanation
+
+4. Recommendations:
+
+   * Suggested improvements
+
+Output is:
+
+* Displayed on frontend dashboard
+* Stored in MongoDB database
+
+---
+
+10. API ENDPOINTS
+
+---
+
+Authentication (Node.js):
+POST /api/auth/register
+POST /api/auth/login
+
+Documents:
+POST /api/documents/upload
+GET /api/documents
+
+Analysis (FastAPI):
+POST /analyze
+POST /extract
+POST /classify
+
+---
+
+11. TROUBLESHOOTING
+
+---
+
+Issue: FastAPI not working
+Fix:
+
+* Ensure zlegal server is running on port 8000
+
+Issue: Backend error
+Fix:
+
+* Check .env file in zlegalai
+* Verify MongoDB connection
+
+Issue: Frontend not connecting
+Fix:
+
+* Check VITE_API_URL
+
+Issue: File upload fails
+Fix:
+
+* Check UploadThing credentials
+
+---
+
+12. AUTHORS
+
+---
+
+* Harsh Kumar Singh
+* Piyush Raj
+* Prasoon Krishan Gupta
+* Omvrit Chitrada
+
+---
+
+## END OF FILE
