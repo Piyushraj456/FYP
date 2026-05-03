@@ -1,10 +1,11 @@
 ================================================================================
                               L E G A L E A S E
                     AI-Powered Legal Document Analysis System
+                          KIET Group of Institution
 ================================================================================
 
   Department of Computer Science & Engineering
-  Final Year Capstone Project | Academic Year 2024-25
+  Final Year Project | Academic Year 2025-26
 
   Project Team:
     - Harsh Kumar Singh
@@ -332,10 +333,6 @@
               correctly configured in both zlegalai/.env and zzlegalai/.env.
               Confirm your UploadThing account is active.
 
-  Issue    :  OCR not working on scanned PDFs
-  Solution :  Ensure pytesseract and Tesseract OCR are properly installed
-              on your system. Refer to the requirements.txt for exact
-              versions.
 
 ================================================================================
                             END OF DOCUMENT
